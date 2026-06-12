@@ -600,3 +600,55 @@
     inset 1.5px 2.5px 1.5px -2px rgba(255, 255, 255, 0.95),
     0 3px 8px rgba(0, 20, 50, 0.25) !important;
 }
+
+/* ---------------------------------------------------------------- */
+/* Design-system tokens: elevation, motion, vibrancy                 */
+/* ---------------------------------------------------------------- */
+
+:root {
+  /* Elevation — separation grows with float height */
+  --elev-1: 0 2px 8px -2px rgba(0, 20, 50, 0.15);
+  --elev-2: 0 8px 24px -6px rgba(0, 20, 50, 0.25);
+  --elev-3: 0 16px 48px -12px rgba(0, 20, 50, 0.35);
+  /* Motion — one spring family across the system */
+  --ease-spring: linear(
+    0, 0.32 8%, 0.74 16%, 1.08 26%, 1.18 32%, 1.1 40%,
+    0.99 50%, 0.95 58%, 1.01 70%, 1.005 80%, 1
+  );
+  --dur-press: 0.09s;
+  --dur-settle: 0.5s;
+}
+
+/* Vibrancy — secondary/tertiary text ON material pulls the backdrop
+   through, instead of flat gray (Apple's vibrancy levels). */
+.lg-regular,
+.liquid-glass {
+  --vibrant-2: color-mix(in srgb, var(--foreground) 64%, transparent);
+  --vibrant-3: color-mix(in srgb, var(--foreground) 42%, transparent);
+}
+:is(.lg-regular, .liquid-glass) .text-muted-foreground {
+  color: var(--vibrant-2);
+}
+
+/* The knob transforms into Liquid Glass during interaction (WWDC25):
+   while dragged, the slider thumb refracts the track beneath it. */
+[data-slot="slider-thumb"]:active {
+  -webkit-backdrop-filter: blur(1px) saturate(1.7) url(#knob-lens);
+  backdrop-filter: blur(1px) saturate(1.7) url(#knob-lens);
+  transform: scale(1.12);
+  transition: transform var(--dur-press) ease-out;
+}
+[data-slot="slider-thumb"] {
+  transition: transform var(--dur-settle) var(--ease-spring);
+}
+
+/* Reduced motion: sliding indicators and knob springs go instant */
+@media (prefers-reduced-motion: reduce) {
+  [role="radiogroup"] > div[aria-hidden] {
+    transition: none !important;
+  }
+  [data-slot="slider-thumb"] {
+    transition: none !important;
+    transform: none !important;
+  }
+}

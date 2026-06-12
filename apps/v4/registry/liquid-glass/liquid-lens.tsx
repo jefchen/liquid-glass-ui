@@ -32,9 +32,11 @@ export function makeDisplacementMap(w: number, h: number, radius: number, rim: n
       const dy = Math.max(qy, 0)
       const dist = Math.hypot(dx, dy) + Math.min(Math.max(qx, qy), 0) - r
 
-      // Refraction strength: 0 at rim-width inside, ramping smoothly to 1 at the edge
+      // Refraction strength follows a circular lens profile (the sag of
+      // a spherical cap): nearly flat in the center, bending sharply at
+      // the rim — physical curvature, not a linear ramp.
       const t = Math.min(Math.max((dist + rim) / rim, 0), 1)
-      const strength = t * t * (3 - 2 * t) // smoothstep
+      const strength = 1 - Math.sqrt(Math.max(0, 1 - t * t))
 
       // Displace outward along the SDF gradient (approximated radially
       // from the nearest edge), bending samples toward the outside like
