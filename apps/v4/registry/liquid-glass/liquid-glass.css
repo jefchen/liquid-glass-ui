@@ -309,7 +309,6 @@
 [data-slot="select-trigger"],
 [data-slot="toggle"],
 [data-slot="toggle-group-item"],
-[data-slot="badge"],
 [data-slot="tabs-list"] {
   -webkit-backdrop-filter: blur(14px) saturate(var(--lg-saturation));
   backdrop-filter: blur(14px) saturate(var(--lg-saturation));
@@ -319,6 +318,17 @@
     inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
     inset -1px -1.5px 1.5px -2px var(--lg-rim-soft),
     0 2px 8px -2px rgba(0, 20, 50, 0.15);
+}
+
+/* Badges: flat frosted pills, not controls. The variant's text color
+   is the identity; the background is a frosted veil OF that color —
+   two colors total, frost mimicking the semantic tone. */
+[data-slot="badge"]:not([data-variant="outline"]):not([data-variant="ghost"]):not([data-variant="link"]) {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: none;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 16%, transparent);
 }
 
 /* Neutral variants (incl. icon/back/carousel buttons): clear glass */
