@@ -41,6 +41,47 @@
 }
 
 /* ---------------------------------------------------------------- */
+/* Frost variant — Apple's "regular" material: milky, mostly opaque, */
+/* heavy diffusion, soft edges, no lensing. Toggled via              */
+/* <html data-material="frost">; every component inherits it because */
+/* the material is entirely token-driven.                            */
+/* ---------------------------------------------------------------- */
+
+html[data-material="frost"] {
+  --lg-tint-strength: 92%;
+  --lg-opacity: 0.88;
+  --lg-blur: 30px;
+  --lg-saturation: 1.15;
+  --lg-rim: rgba(255, 255, 255, 0.55);
+  --lg-rim-soft: rgba(255, 255, 255, 0.25);
+  --lg-edge-bright: rgba(255, 255, 255, 0.6);
+  --lg-edge-mid: rgba(255, 255, 255, 0.3);
+  --lg-edge-dim: rgba(255, 255, 255, 0.15);
+  --lg-inner-shade: rgba(0, 30, 60, 0.05);
+}
+
+html[data-material="frost"].dark {
+  --lg-rim: rgba(255, 255, 255, 0.18);
+  --lg-rim-soft: rgba(255, 255, 255, 0.08);
+  --lg-edge-bright: rgba(255, 255, 255, 0.22);
+  --lg-edge-mid: rgba(255, 255, 255, 0.1);
+  --lg-edge-dim: rgba(255, 255, 255, 0.04);
+}
+
+/* Frost diffuses — the specular sheen and lensing belong to clear glass */
+html[data-material="frost"] .liquid-glass::before,
+html[data-material="frost"] [data-slot="card"]::before,
+html[data-material="frost"] [data-slot="dialog-content"]::before,
+html[data-material="frost"] [data-slot="popover-content"]::before {
+  opacity: 0.35;
+}
+
+html[data-material="frost"] .lg-lens {
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
+}
+
+/* ---------------------------------------------------------------- */
 /* Core material                                                     */
 /* ---------------------------------------------------------------- */
 
