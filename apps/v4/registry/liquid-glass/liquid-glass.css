@@ -643,9 +643,8 @@
   --vibrant-2: color-mix(in srgb, var(--foreground) 64%, transparent);
   --vibrant-3: color-mix(in srgb, var(--foreground) 42%, transparent);
 }
-:is(.lg-regular, .liquid-glass) .text-muted-foreground {
-  color: var(--vibrant-2);
-}
+/* (secondary ink is translucent at the token level — it is vibrant on
+   every material automatically; no per-surface override needed) */
 
 /* The knob transforms into Liquid Glass during interaction (WWDC25):
    while dragged, the slider thumb refracts the track beneath it. */
