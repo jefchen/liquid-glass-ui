@@ -224,7 +224,7 @@
 /* they are CONTENT, not glass.                                      */
 /* ---------------------------------------------------------------- */
 
-[data-slot="button"]:not([class*="ghost"]):not([class*="link"]),
+[data-slot="button"]:not([class*="ghost"]):not([class*="link"]):not([data-slot="button-group"] *),
 [data-slot="badge"],
 [data-slot="tabs-list"],
 [data-slot="toggle-group"] {
@@ -277,8 +277,11 @@
 [data-slot="button"][class*="bg-primary"] {
   background: color-mix(in srgb, var(--primary) 80%, transparent);
 }
-[data-slot="button"][class*="bg-destructive"] {
-  background: color-mix(in srgb, var(--destructive) 80%, transparent);
+
+/* Button groups keep shadcn's own joined-edge rounding; no per-button
+   capsule or lift inside a group. */
+[data-slot="button-group"] [data-slot="button"] {
+  transform: none !important;
 }
 
 /* Inputs: quietly translucent content fields (not chrome) */
