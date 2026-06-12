@@ -17,7 +17,6 @@ const badgeVariants = cva(
         success: "text-green-600 dark:text-green-400",
         warning: "text-amber-600 dark:text-amber-400",
         info: "text-sky-600 dark:text-sky-400",
-        purple: "text-purple-600 dark:text-purple-400",
         outline: "border-border text-foreground [a]:hover:bg-muted",
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
