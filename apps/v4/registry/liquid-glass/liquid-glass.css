@@ -653,22 +653,25 @@
   }
 }
 
-/* Switch follows the segmented-control model: the track is a gray
-   frosted layer in BOTH states (on = slightly denser gray, not blue);
-   the sliding glass knob is the state indicator, like the segmented
-   thumb. */
+/* Switch IS a two-item segmented control: same gray frosted track,
+   same clear glass thumb sliding on the system spring — and the track
+   fills with the primary tint when enabled. */
 [data-slot="switch"] {
-  background: color-mix(in srgb, var(--foreground) 12%, transparent) !important;
+  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
   border: none !important;
+  transition: background-color 0.25s ease;
 }
 [data-slot="switch"][data-state="checked"] {
-  background: color-mix(in srgb, var(--foreground) 24%, transparent) !important;
+  background: var(--primary) !important;
 }
 [data-slot="switch-thumb"] {
-  background: color-mix(in srgb, white 80%, transparent) !important;
+  background: color-mix(in srgb, white 30%, transparent) !important;
+  -webkit-backdrop-filter: saturate(1.4) !important;
+  backdrop-filter: saturate(1.4) !important;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.7),
-    inset 1px 1.5px 1px -1px rgba(255, 255, 255, 1),
-    0 2px 6px rgba(0, 20, 50, 0.3) !important;
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 1.5px 2.5px 1.5px -2px rgba(255, 255, 255, 0.95),
+    inset -1px -1.5px 1.5px -2px rgba(255, 255, 255, 0.5),
+    0 3px 8px rgba(0, 20, 50, 0.25) !important;
   transition: transform var(--dur-settle) var(--ease-spring) !important;
 }
