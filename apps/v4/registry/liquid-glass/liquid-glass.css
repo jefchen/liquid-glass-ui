@@ -405,11 +405,13 @@
   margin-right: 10px !important;
 }
 
-/* Inputs: quiet gray content fields (not chrome) */
+/* Inputs: quiet gray content fields (not chrome). The fill derives
+   from the foreground so it stays visible on any surface, light or
+   dark — like Apple's quaternary system fill. */
 [data-slot="input"],
 [data-slot="textarea"] {
-  background: color-mix(in srgb, var(--muted) 75%, transparent);
-  border-color: transparent;
+  background: color-mix(in srgb, var(--foreground) 7%, transparent);
+  border-color: color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 /* Inside a frosted overlay panel, search/command surfaces are bare —
