@@ -238,7 +238,9 @@
   /* Frost physics: barely any paint — the look comes from scattering.
      Heavy diffusion, a slight brightness lift, and DEsaturation (light
      bouncing through ice crystals washes color out), not a white wash. */
-  background: color-mix(in srgb, var(--background) 22%, transparent);
+  /* Override --frost-tint to slack frost over any background color,
+     e.g. style="--frost-tint: var(--primary)" or a raw color. */
+  background: color-mix(in srgb, var(--frost-tint, var(--background)) 22%, transparent);
   -webkit-backdrop-filter: blur(48px) saturate(0.85) brightness(1.08) contrast(0.97);
   backdrop-filter: blur(48px) saturate(0.85) brightness(1.08) contrast(0.97);
   border: 1px solid rgba(255, 255, 255, 0.28);
