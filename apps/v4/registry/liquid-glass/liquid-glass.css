@@ -145,6 +145,56 @@
   backdrop-filter: none;
 }
 
+/* Component-level respect: menus and tooltips are utilitarian — a
+   quieter edge, tighter corners, adaptive fill (regular-leaning),
+   while dialogs/sheets over media keep the full clear-glass optics. */
+[data-slot="dropdown-menu-content"],
+[data-slot="context-menu-content"],
+[data-slot="menubar-content"],
+[data-slot="select-content"],
+[data-slot="navigation-menu-viewport"],
+[data-slot="hover-card-content"],
+[data-slot="tooltip-content"] {
+  --lg-edge-bright: rgba(255, 255, 255, 0.45);
+  --lg-edge-mid: rgba(255, 255, 255, 0.22);
+  --lg-edge-dim: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--popover) 72%, transparent);
+  border-radius: calc(var(--radius) * 1.3);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+    0 8px 24px -6px rgba(0, 20, 50, 0.25);
+}
+
+[data-slot="tooltip-content"] {
+  border-radius: var(--radius);
+}
+
+/* ---------------------------------------------------------------- */
+/* Regular variant (frost) — Apple's adaptive material for           */
+/* structural chrome: navigation bars, sidebars, toolbars. Derives   */
+/* its fill from the theme background so it adapts to light/dark,    */
+/* diffuses heavily, and carries only a hairline edge — no clear-    */
+/* glass optics, no lensing.                                         */
+/* ---------------------------------------------------------------- */
+
+.lg-regular {
+  position: relative;
+  background: color-mix(in srgb, var(--background) 60%, transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(1.4);
+  backdrop-filter: blur(30px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+    0 8px 24px -8px rgba(0, 20, 50, 0.18);
+  border-radius: calc(var(--radius) * 1.6);
+}
+
+/* Controls inside regular chrome are solid (no nested filters) */
+.lg-regular :is([data-slot]) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
 /* ---------------------------------------------------------------- */
 /* Content layer — calm, near-solid surface the page lives on        */
 /* ---------------------------------------------------------------- */
