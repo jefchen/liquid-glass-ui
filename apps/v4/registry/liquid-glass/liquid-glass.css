@@ -271,6 +271,32 @@
   backdrop-filter: none;
 }
 
+/* Inside the frosted bar the bar IS the material: controls sit flat
+   on it — no fills, no rims, no lift — just a quiet hover wash. The
+   primary action stays solid. */
+.lg-regular :is(
+  [data-slot="button"]:not([class*="bg-primary"]),
+  [data-slot="select-trigger"],
+  [data-slot="toggle"],
+  [data-slot="toggle-group-item"],
+  [data-slot="tabs-list"]
+) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.lg-regular :is(
+  [data-slot="button"]:not([class*="bg-primary"]),
+  [data-slot="select-trigger"],
+  [data-slot="toggle"]
+):hover {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
+}
+.lg-regular [data-slot="toggle-group-item"][data-state="on"] {
+  background: color-mix(in srgb, var(--foreground) 10%, transparent) !important;
+}
+
 /* ---------------------------------------------------------------- */
 /* Content layer — calm, near-solid surface the page lives on        */
 /* ---------------------------------------------------------------- */
