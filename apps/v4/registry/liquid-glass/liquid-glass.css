@@ -25,6 +25,12 @@
   --lg-shadow:
     0 12px 32px -8px rgba(0, 20, 50, 0.18),
     0 2px 8px rgba(0, 20, 50, 0.08);
+
+  /* One fill family — every surface derives from the same base so
+     glass, frost, and overlays stay consistent across components. */
+  --lg-fill-glass: color-mix(in srgb, var(--background) 35%, transparent);
+  --lg-fill-frost: color-mix(in srgb, var(--background) 65%, transparent);
+  --lg-fill-overlay: color-mix(in srgb, var(--background) 50%, transparent);
 }
 
 /* ---------------------------------------------------------------- */
@@ -131,18 +137,52 @@
   );
 }
 
-/* Glass never stacks on glass: anything inside a glass pane renders
-   solid — no nested backdrop filters, no nested rim rings. */
+/* Glass never stacks on glass: controls inside a glass pane render as
+   FROST — a flat adaptive layer sitting on the glass, no nested
+   backdrop filters, no glass rims. Prominent buttons stay solid. */
 :is(
   .liquid-glass,
   [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"],
   [data-slot="sheet-content"],
   [data-slot="drawer-content"],
   [data-slot="popover-content"],
-  [data-slot="dropdown-menu-content"]
+  [data-slot="dropdown-menu-content"],
+  .lg-regular
 ) :is([data-slot]) {
   -webkit-backdrop-filter: none;
   backdrop-filter: none;
+}
+
+:is(
+  .liquid-glass,
+  [data-slot="dialog-content"],
+  [data-slot="alert-dialog-content"],
+  [data-slot="sheet-content"],
+  [data-slot="drawer-content"],
+  [data-slot="popover-content"],
+  .lg-regular
+) :is(
+  [data-slot="button"]:not([class*="bg-primary"]):not([class*="ghost"]):not([class*="link"]):not([class*="destructive"]),
+  [data-slot="select-trigger"],
+  [data-slot="toggle"],
+  [data-slot="toggle-group-item"],
+  [data-slot="input"],
+  [data-slot="textarea"]
+) {
+  background: var(--lg-fill-frost);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--foreground) 8%, transparent),
+    0 1px 3px rgba(0, 20, 50, 0.08);
+}
+
+:is(
+  .liquid-glass,
+  [data-slot="dialog-content"],
+  [data-slot="popover-content"],
+  .lg-regular
+) [data-slot="button"][class*="bg-primary"] {
+  background: var(--primary);
 }
 
 /* Component-level respect: menus and tooltips are utilitarian — a
@@ -159,7 +199,7 @@
   --lg-edge-mid: rgba(255, 255, 255, 0.22);
   --lg-edge-dim: rgba(255, 255, 255, 0.08);
   /* translucent glass, blurred hard enough to keep menu text legible */
-  background: color-mix(in srgb, var(--popover) 45%, transparent);
+  background: var(--lg-fill-overlay);
   -webkit-backdrop-filter: blur(40px) saturate(var(--lg-saturation));
   backdrop-filter: blur(40px) saturate(var(--lg-saturation));
   border-radius: calc(var(--radius) * 1.3);
@@ -170,7 +210,7 @@
 
 /* Command palette is an overlay surface too */
 [data-slot="command"] {
-  background: color-mix(in srgb, var(--popover) 45%, transparent);
+  background: var(--lg-fill-overlay);
   -webkit-backdrop-filter: blur(40px) saturate(var(--lg-saturation));
   backdrop-filter: blur(40px) saturate(var(--lg-saturation));
   border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
@@ -190,7 +230,7 @@
 
 .lg-regular {
   position: relative;
-  background: color-mix(in srgb, var(--background) 60%, transparent);
+  background: var(--lg-fill-frost);
   -webkit-backdrop-filter: blur(30px) saturate(1.4);
   backdrop-filter: blur(30px) saturate(1.4);
   border: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent);
@@ -263,14 +303,13 @@
     0 2px 8px -2px rgba(0, 20, 50, 0.15);
 }
 
-/* Neutral variants: clear glass over whatever is behind */
-[data-slot="button"][class*="bg-background"],
-[data-slot="button"][class*="bg-secondary"],
+/* Neutral variants (incl. icon/back/carousel buttons): clear glass */
+[data-slot="button"]:not([class*="bg-primary"]):not([class*="ghost"]):not([class*="link"]):not([class*="destructive"]),
 [data-slot="select-trigger"],
 [data-slot="toggle"],
 [data-slot="toggle-group-item"],
 [data-slot="tabs-list"] {
-  background: color-mix(in srgb, var(--background) 35%, transparent);
+  background: var(--lg-fill-glass);
 }
 
 /* Prominent variants: tinted glass (Apple's glassProminent) */
@@ -278,10 +317,36 @@
   background: color-mix(in srgb, var(--primary) 80%, transparent);
 }
 
-/* Button groups keep shadcn's own joined-edge rounding; no per-button
-   capsule or lift inside a group. */
-[data-slot="button-group"] [data-slot="button"] {
+/* Button group: ONE continuous Liquid Glass capsule. The buttons
+   inside are flat text regions divided by hairlines — pressing one
+   never separates the glass. */
+[data-slot="button-group"] {
+  background: var(--lg-fill-glass);
+  -webkit-backdrop-filter: blur(14px) saturate(var(--lg-saturation));
+  backdrop-filter: blur(14px) saturate(var(--lg-saturation));
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
+    inset -1px -1.5px 1.5px -2px var(--lg-rim-soft),
+    0 2px 8px -2px rgba(0, 20, 50, 0.15);
+}
+[data-slot="button-group"] [data-slot="button"],
+[data-slot="button-group"] > div {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   transform: none !important;
+}
+[data-slot="button-group"] [data-slot="button"]:hover {
+  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
+}
+[data-slot="button-group"] > :not(:first-child) {
+  border-left: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent) !important;
 }
 
 /* Inputs: quietly translucent content fields (not chrome) */
