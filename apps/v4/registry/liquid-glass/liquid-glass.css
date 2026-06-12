@@ -744,14 +744,29 @@
 }
 
 
-/* Flat semantic buttons are colored text only — like Link */
+/* Flat semantic buttons: colored text with a clear glass pill resting
+   on top — the glass-cap treatment, built in. */
 [data-slot="button"]:is([data-variant="success"],[data-variant="warning"],[data-variant="info"]) {
+  position: relative;
   background: transparent !important;
   border-color: transparent !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
   box-shadow: none !important;
   transform: none !important;
+}
+[data-slot="button"]:is([data-variant="success"],[data-variant="warning"],[data-variant="info"])::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: color-mix(in srgb, white 18%, transparent);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+    inset 1px 1.5px 1px -1.5px rgba(255, 255, 255, 0.9),
+    inset -0.5px -1px 1px -1.5px rgba(255, 255, 255, 0.4),
+    0 2px 6px -2px rgba(0, 20, 50, 0.18);
 }
 
 /* Tinted glass buttons: a colored translucent pane with white text,
