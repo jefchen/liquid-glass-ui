@@ -308,6 +308,10 @@
    primary action stays solid. */
 .lg-regular :is(
   [data-slot="button"]:not([class*="bg-primary"]),
+  [data-slot="popover-trigger"]:not([class*="bg-primary"]),
+  [data-slot="dialog-trigger"]:not([class*="bg-primary"]),
+  [data-slot="drawer-trigger"]:not([class*="bg-primary"]),
+  [data-slot="dropdown-menu-trigger"]:not([class*="bg-primary"]),
   [data-slot="select-trigger"],
   [data-slot="toggle"],
   [data-slot="toggle-group-item"],
@@ -316,12 +320,18 @@
   /* The segmented track's ink tint, shared by every chrome control */
   background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
   border-color: transparent !important;
-  border-radius: 9999px;
+  border-radius: 9999px !important;
   box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
   transform: none !important;
 }
 .lg-regular :is(
   [data-slot="button"]:not([class*="bg-primary"]),
+  [data-slot="popover-trigger"]:not([class*="bg-primary"]),
+  [data-slot="dialog-trigger"]:not([class*="bg-primary"]),
+  [data-slot="drawer-trigger"]:not([class*="bg-primary"]),
+  [data-slot="dropdown-menu-trigger"]:not([class*="bg-primary"]),
   [data-slot="select-trigger"],
   [data-slot="toggle"]
 ):hover {
