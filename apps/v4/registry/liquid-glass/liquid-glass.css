@@ -313,8 +313,10 @@
   [data-slot="toggle-group-item"],
   [data-slot="tabs-list"]
 ) {
-  background: transparent !important;
+  /* The segmented track's ink tint, shared by every chrome control */
+  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
   border-color: transparent !important;
+  border-radius: 9999px;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -323,7 +325,7 @@
   [data-slot="select-trigger"],
   [data-slot="toggle"]
 ):hover {
-  background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
+  background: color-mix(in srgb, var(--foreground) 13%, transparent) !important;
 }
 .lg-regular [data-slot="toggle-group-item"][data-state="on"] {
   background: color-mix(in srgb, var(--foreground) 10%, transparent) !important;
