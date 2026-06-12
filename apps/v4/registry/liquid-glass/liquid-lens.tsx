@@ -14,7 +14,7 @@ import * as React from "react"
  * back to the base blur declared by the material layer.
  */
 
-function makeDisplacementMap(w: number, h: number, radius: number, rim: number): string {
+export function makeDisplacementMap(w: number, h: number, radius: number, rim: number): string {
   const canvas = document.createElement("canvas")
   canvas.width = w
   canvas.height = h
