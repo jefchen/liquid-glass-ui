@@ -5,7 +5,7 @@ import { makeDisplacementMap } from "./liquid-lens"
 
 let segCounter = 0
 
-export type SegmentedOption = { value: string; label: string }
+export type SegmentedOption = { value: string; label: React.ReactNode }
 
 /**
  * Apple-style segmented control: a flat gray frosted track with a
