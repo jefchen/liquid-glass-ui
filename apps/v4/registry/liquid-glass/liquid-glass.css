@@ -50,18 +50,18 @@
 [data-slot="select-content"],
 [data-slot="navigation-menu-viewport"],
 [data-slot="tooltip-content"] {
+  /* HIG: regular is the adaptive variant and variants are never mixed.
+     All floating surfaces share this adaptive base (from the theme
+     background) with a thin themed tint wash over it. */
   background:
     linear-gradient(
       125deg,
-      color-mix(in srgb, white calc(var(--lg-opacity) * 18%), transparent) 0%,
+      color-mix(in srgb, white calc(var(--lg-opacity) * 14%), transparent) 0%,
       transparent 45%,
-      color-mix(in srgb, white calc(var(--lg-opacity) * 8%), transparent) 100%
+      color-mix(in srgb, white calc(var(--lg-opacity) * 6%), transparent) 100%
     ),
-    color-mix(
-      in srgb,
-      var(--lg-tint) calc(var(--lg-opacity) * var(--lg-tint-strength)),
-      transparent
-    );
+    color-mix(in srgb, var(--lg-tint) calc(var(--lg-opacity) * 16%), transparent),
+    var(--lg-fill-overlay);
   -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
   backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
   border: none;
