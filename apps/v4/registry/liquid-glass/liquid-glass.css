@@ -744,18 +744,21 @@
 }
 
 
-/* Flat semantic buttons (badge recipe) skip glass optics entirely */
+/* Flat semantic buttons are colored text only — like Link */
 [data-slot="button"]:is([data-variant="success"],[data-variant="warning"],[data-variant="info"]) {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  box-shadow: none;
+  background: transparent !important;
+  border-color: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 /* Tinted glass buttons: a colored translucent pane with white text,
    set the hue via --tint. Same color set as badges. */
 [data-slot="button"].glass-tint {
   /* vivid accent under glass, like the switch's system green */
-  background: color-mix(in srgb, var(--tint) 78%, transparent) !important;
+  background: color-mix(in srgb, var(--tint) 92%, transparent) !important;
   color: white !important;
   border: none;
   -webkit-backdrop-filter: blur(10px) saturate(1.5);

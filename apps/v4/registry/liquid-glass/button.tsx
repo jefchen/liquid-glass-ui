@@ -14,12 +14,9 @@ const buttonVariants = cva(
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
-        success:
-          "text-green-600 dark:text-green-400 bg-[color-mix(in_srgb,currentColor_10%,transparent)] border border-[color-mix(in_srgb,currentColor_18%,transparent)] hover:bg-[color-mix(in_srgb,currentColor_16%,transparent)]",
-        warning:
-          "text-amber-600 dark:text-amber-400 bg-[color-mix(in_srgb,currentColor_10%,transparent)] border border-[color-mix(in_srgb,currentColor_18%,transparent)] hover:bg-[color-mix(in_srgb,currentColor_16%,transparent)]",
-        info:
-          "text-sky-600 dark:text-sky-400 bg-[color-mix(in_srgb,currentColor_10%,transparent)] border border-[color-mix(in_srgb,currentColor_18%,transparent)] hover:bg-[color-mix(in_srgb,currentColor_16%,transparent)]",
+        success: "text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300",
+        warning: "text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300",
+        info: "text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300",
         ghost:
           "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
         destructive:
