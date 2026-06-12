@@ -73,9 +73,10 @@ export function GlassLens({
   className,
   strength = 28,
   rim = 18,
+  disabled = false,
   style,
   ...props
-}: React.ComponentProps<"div"> & { strength?: number; rim?: number }) {
+}: React.ComponentProps<"div"> & { strength?: number; rim?: number; disabled?: boolean }) {
   const ref = React.useRef<HTMLDivElement>(null)
   const [filterId] = React.useState(() => `lg-lens-${++lensCounter}`)
   const [map, setMap] = React.useState<{ href: string; w: number; h: number } | null>(null)
@@ -110,7 +111,7 @@ export function GlassLens({
       className={className}
       style={{
         ...style,
-        ...(map
+        ...(map && !disabled
           ? ({
               WebkitBackdropFilter: `blur(var(--lg-blur)) saturate(var(--lg-saturation)) url(#${filterId})`,
               backdropFilter: `blur(var(--lg-blur)) saturate(var(--lg-saturation)) url(#${filterId})`,

@@ -26,19 +26,10 @@
     0 2px 8px rgba(0, 20, 50, 0.08);
 }
 
-.dark {
-  --lg-tint: hsl(220 25% 10%);
-  --lg-rim: rgba(255, 255, 255, 0.35);
-  --lg-rim-soft: rgba(255, 255, 255, 0.16);
-  --lg-ring: rgba(255, 255, 255, 0.09);
-  --lg-edge-bright: rgba(255, 255, 255, 0.45);
-  --lg-edge-mid: rgba(255, 255, 255, 0.18);
-  --lg-edge-dim: rgba(255, 255, 255, 0.05);
-  --lg-inner-shade: rgba(0, 0, 0, 0.35);
-  --lg-shadow:
-    0 16px 40px -8px rgba(0, 0, 0, 0.55),
-    0 2px 8px rgba(0, 0, 0, 0.35);
-}
+/* Glass has no dark variant — it is the same clear material over
+   whatever image sits behind it. Only the theme tint (driven by the
+   generated palette) flavors it; .dark adjusts text/background tokens,
+   never the material. */
 
 /* ---------------------------------------------------------------- */
 /* Frost variant — Apple's "regular" material: milky, mostly opaque, */
@@ -47,38 +38,67 @@
 /* the material is entirely token-driven.                            */
 /* ---------------------------------------------------------------- */
 
-html[data-material="frost"] {
-  --lg-tint-strength: 92%;
-  --lg-opacity: 0.88;
-  --lg-blur: 30px;
-  --lg-saturation: 1.15;
-  --lg-rim: rgba(255, 255, 255, 0.55);
-  --lg-rim-soft: rgba(255, 255, 255, 0.25);
-  --lg-edge-bright: rgba(255, 255, 255, 0.6);
-  --lg-edge-mid: rgba(255, 255, 255, 0.3);
-  --lg-edge-dim: rgba(255, 255, 255, 0.15);
-  --lg-inner-shade: rgba(0, 30, 60, 0.05);
+html[data-material="frost"] :is(
+  .liquid-glass,
+  [data-slot="card"],
+  [data-slot="dialog-content"],
+  [data-slot="sheet-content"],
+  [data-slot="drawer-content"],
+  [data-slot="popover-content"],
+  [data-slot="hover-card-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="context-menu-content"],
+  [data-slot="menubar-content"],
+  [data-slot="select-content"],
+  [data-slot="navigation-menu-viewport"],
+  [data-slot="command"],
+  [data-slot="tooltip-content"],
+  [data-slot="alert"],
+  [data-slot="tabs-list"],
+  [data-slot="sidebar-inner"]
+) {
+  /* Figma frost: one uniform translucent fill + heavy background blur,
+     a plain hairline stroke, a soft drop shadow — and nothing else. */
+  background: color-mix(in srgb, var(--lg-tint) 72%, transparent);
+  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-html[data-material="frost"].dark {
-  --lg-rim: rgba(255, 255, 255, 0.18);
-  --lg-rim-soft: rgba(255, 255, 255, 0.08);
-  --lg-edge-bright: rgba(255, 255, 255, 0.22);
-  --lg-edge-mid: rgba(255, 255, 255, 0.1);
-  --lg-edge-dim: rgba(255, 255, 255, 0.04);
+html[data-material="frost"] :is(
+  [data-slot="button"],
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"],
+  [data-slot="toggle"],
+  [data-slot="toggle-group-item"],
+  [data-slot="badge"],
+  [data-slot="slider-track"],
+  [data-slot="switch"],
+  [data-slot="progress"]
+) {
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-/* Frost diffuses — the specular sheen and lensing belong to clear glass */
-html[data-material="frost"] .liquid-glass::before,
-html[data-material="frost"] [data-slot="card"]::before,
-html[data-material="frost"] [data-slot="dialog-content"]::before,
-html[data-material="frost"] [data-slot="popover-content"]::before {
-  opacity: 0.35;
+html[data-material="frost"] [data-slot="button"]:hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* No glass-only optics in frost: no specular sheen, no gradient rim
+   ring, no displacement lensing. */
+html[data-material="frost"] :is(.liquid-glass, [data-slot])::before,
+html[data-material="frost"] :is(.liquid-glass, [data-slot])::after {
+  content: none;
 }
 
 html[data-material="frost"] .lg-lens {
-  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
-  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
+  -webkit-backdrop-filter: blur(40px);
+  backdrop-filter: blur(40px);
 }
 
 /* ---------------------------------------------------------------- */
@@ -209,18 +229,6 @@ html[data-material="frost"] .lg-lens {
     115deg,
     rgba(255, 255, 255, 0.22) 0%,
     rgba(255, 255, 255, 0.05) 28%,
-    transparent 42%
-  );
-}
-
-.dark .liquid-glass::before,
-.dark [data-slot="card"]::before,
-.dark [data-slot="dialog-content"]::before,
-.dark [data-slot="popover-content"]::before {
-  background: linear-gradient(
-    115deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.02) 28%,
     transparent 42%
   );
 }
