@@ -363,8 +363,29 @@
 [data-slot="button-group"] [data-slot="button"]:hover {
   background: color-mix(in srgb, var(--foreground) 8%, transparent) !important;
 }
+/* Dividers float inside the capsule — inset from the glass edge, the
+   way Apple insets separators in grouped controls. */
 [data-slot="button-group"] > :not(:first-child) {
-  border-left: 1px solid color-mix(in srgb, var(--foreground) 12%, transparent) !important;
+  position: relative;
+}
+[data-slot="button-group"] > :not(:first-child)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 1px;
+  background: color-mix(in srgb, var(--foreground) 14%, transparent);
+}
+
+/* Same inset principle for separators inside glass menus */
+[data-slot="dropdown-menu-separator"],
+[data-slot="context-menu-separator"],
+[data-slot="menubar-separator"],
+[data-slot="select-separator"],
+[data-slot="command-separator"] {
+  margin-left: 10px !important;
+  margin-right: 10px !important;
 }
 
 /* Inputs: quietly translucent content fields (not chrome) */
