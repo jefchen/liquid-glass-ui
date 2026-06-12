@@ -1,37 +1,36 @@
 /*
- * Liquid Glass — a material layer for shadcn/ui
- *
- * Modeled on Apple's Liquid Glass design language (WWDC 2025/2026):
- *  - Translucent material that refracts and reflects surrounding content
- *  - Specular highlight along the top edge, soft inner glow on the bottom
- *  - Lensing on curved edges (SVG displacement, see #lg-lens filter)
- *  - Adaptive tint: the material picks up the theme's tint color
- *  - Text never sits on raw glass — content layers stay solid
- *  - User-adjustable transparency (--lg-opacity), mirroring Apple's
- *    2026 transparency slider
- *
- * Applied via data-slot selectors so every shadcn component gets the
- * material with zero component-file edits.
+ * Liquid Glass material layer — applied to every shadcn component via
+ * data-slot selectors. Tuned to match the iOS 26 Liquid Glass look:
+ * near-clear fill, capsule geometry, rim-light edges (bright crescent
+ * top-left, faint counter-light bottom-right), angled specular sheen,
+ * deep blur with vibrancy, soft diffuse drop shadows.
  */
 
 :root {
-  /* Material tuning — overridden by generated themes */
-  --lg-tint: 210 40% 98%;           /* hsl triplet of the glass tint   */
-  --lg-tint-strength: 0.55;          /* how strongly tint colors glass  */
-  --lg-opacity: 0.6;                 /* 0 = clear glass, 1 = opaque     */
-  --lg-blur: 18px;
-  --lg-saturation: 1.6;
-  --lg-radius: 1.25rem;
-  --lg-specular: rgba(255, 255, 255, 0.75);
-  --lg-edge: rgba(255, 255, 255, 0.35);
-  --lg-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+  --lg-tint: hsl(210 40% 98%);
+  --lg-tint-strength: 38%;
+  --lg-opacity: 0.5;
+  --lg-blur: 24px;
+  --lg-saturation: 1.8;
+  /* rim lights */
+  --lg-rim: rgba(255, 255, 255, 0.9);
+  --lg-rim-soft: rgba(255, 255, 255, 0.45);
+  --lg-ring: rgba(255, 255, 255, 0.14);
+  --lg-inner-shade: rgba(0, 30, 60, 0.1);
+  --lg-shadow:
+    0 12px 32px -8px rgba(0, 20, 50, 0.18),
+    0 2px 8px rgba(0, 20, 50, 0.08);
 }
 
 .dark {
-  --lg-tint: 220 25% 12%;
-  --lg-specular: rgba(255, 255, 255, 0.22);
-  --lg-edge: rgba(255, 255, 255, 0.12);
-  --lg-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --lg-tint: hsl(220 25% 10%);
+  --lg-rim: rgba(255, 255, 255, 0.35);
+  --lg-rim-soft: rgba(255, 255, 255, 0.16);
+  --lg-ring: rgba(255, 255, 255, 0.09);
+  --lg-inner-shade: rgba(0, 0, 0, 0.35);
+  --lg-shadow:
+    0 16px 40px -8px rgba(0, 0, 0, 0.55),
+    0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* ---------------------------------------------------------------- */
@@ -55,18 +54,46 @@
 [data-slot="alert"],
 [data-slot="tabs-list"],
 [data-slot="sidebar-inner"] {
-  background-color: hsl(var(--lg-tint) / calc(var(--lg-opacity) * var(--lg-tint-strength)));
+  background:
+    linear-gradient(
+      125deg,
+      color-mix(in srgb, white calc(var(--lg-opacity) * 18%), transparent) 0%,
+      transparent 45%,
+      color-mix(in srgb, white calc(var(--lg-opacity) * 8%), transparent) 100%
+    ),
+    color-mix(
+      in srgb,
+      var(--lg-tint) calc(var(--lg-opacity) * var(--lg-tint-strength)),
+      transparent
+    );
   -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
   backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
-  border: 1px solid var(--lg-edge);
+  border: none;
+  /* Rim-lit glass edge: faint uniform ring + bright top-left crescent +
+     soft bottom-right counter-light + inner bottom shade for depth.
+     Negative spread keeps each highlight hugging the edge. */
   box-shadow:
-    inset 0 1px 0 0 var(--lg-specular),                    /* specular top edge */
-    inset 0 -1px 0 0 rgba(255, 255, 255, 0.06),            /* bottom inner glow */
+    inset 0 0 0 1px var(--lg-ring),
+    inset 2.5px 4px 2px -3px var(--lg-rim),
+    inset -2px -3px 2px -3px var(--lg-rim-soft),
+    inset 0 -12px 20px -16px var(--lg-inner-shade),
     var(--lg-shadow);
+  border-radius: calc(var(--radius) * 1.6);
+}
+
+/* Positioning context for the specular ::before — only on in-flow
+   surfaces. Floating surfaces (dialogs, popovers, menus) are already
+   positioned by their primitives; forcing `relative` there breaks
+   their fixed centering. */
+.liquid-glass,
+[data-slot="card"],
+[data-slot="alert"],
+[data-slot="tabs-list"],
+[data-slot="command"] {
   position: relative;
 }
 
-/* Specular sweep — a soft highlight that suggests curved glass */
+/* Angled specular sheen — light catching the curved face */
 .liquid-glass::before,
 [data-slot="card"]::before,
 [data-slot="dialog-content"]::before,
@@ -76,14 +103,49 @@
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    radial-gradient(120% 60% at 50% -10%, rgba(255, 255, 255, 0.28) 0%, transparent 55%);
-  opacity: 0.8;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.05) 28%,
+    transparent 42%
+  );
+}
+
+.dark .liquid-glass::before,
+.dark [data-slot="card"]::before,
+.dark [data-slot="dialog-content"]::before,
+.dark [data-slot="popover-content"]::before {
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 28%,
+    transparent 42%
+  );
 }
 
 /* ---------------------------------------------------------------- */
-/* Interactive glass — buttons, inputs, toggles                      */
+/* Interactive glass — iOS 26 capsule controls                       */
 /* ---------------------------------------------------------------- */
+
+[data-slot="button"]:not([class*="ghost"]):not([class*="link"]),
+[data-slot="badge"],
+[data-slot="tabs-list"],
+[data-slot="toggle-group"] {
+  border-radius: 9999px;
+}
+
+[data-slot="tabs-trigger"],
+[data-slot="toggle-group-item"]:first-child,
+[data-slot="toggle-group-item"]:last-child,
+[data-slot="toggle"] {
+  border-radius: 9999px;
+}
+
+[data-slot="input"],
+[data-slot="textarea"],
+[data-slot="select-trigger"] {
+  border-radius: calc(var(--radius) * 1.2);
+}
 
 [data-slot="button"]:not([class*="ghost"]):not([class*="link"]),
 [data-slot="input"],
@@ -92,35 +154,55 @@
 [data-slot="toggle"],
 [data-slot="toggle-group-item"],
 [data-slot="badge"] {
-  -webkit-backdrop-filter: blur(calc(var(--lg-blur) * 0.6)) saturate(var(--lg-saturation));
-  backdrop-filter: blur(calc(var(--lg-blur) * 0.6)) saturate(var(--lg-saturation));
-  border-color: var(--lg-edge);
-  box-shadow: inset 0 1px 0 0 var(--lg-specular), 0 1px 3px rgba(0, 0, 0, 0.08);
-  transition: box-shadow 0.25s ease, transform 0.15s ease, background-color 0.2s ease;
+  -webkit-backdrop-filter: blur(calc(var(--lg-blur) * 0.5)) saturate(var(--lg-saturation));
+  backdrop-filter: blur(calc(var(--lg-blur) * 0.5)) saturate(var(--lg-saturation));
+  border-color: transparent;
+  box-shadow:
+    inset 0 0 0 1px var(--lg-ring),
+    inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
+    inset -1px -1.5px 1.5px -2px var(--lg-rim-soft),
+    0 2px 8px -2px rgba(0, 20, 50, 0.15);
+  transition:
+    box-shadow 0.25s ease,
+    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease;
 }
 
 [data-slot="button"]:not([class*="ghost"]):not([class*="link"]):hover {
-  box-shadow: inset 0 1px 0 0 var(--lg-specular), 0 4px 16px rgba(0, 0, 0, 0.14);
-  transform: translateY(-1px);
+  box-shadow:
+    inset 0 0 0 1px var(--lg-ring),
+    inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
+    inset -1px -1.5px 1.5px -2px var(--lg-rim-soft),
+    0 6px 20px -4px rgba(0, 20, 50, 0.25);
+  transform: translateY(-1px) scale(1.02);
 }
 
 [data-slot="button"]:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.97);
 }
 
-/* Sliders, switches, progress get a glass track */
+/* Sliders, switches, progress — glass tracks with rim light */
 [data-slot="slider-track"],
 [data-slot="switch"],
 [data-slot="progress"] {
   -webkit-backdrop-filter: blur(8px) saturate(var(--lg-saturation));
   backdrop-filter: blur(8px) saturate(var(--lg-saturation));
-  border: 1px solid var(--lg-edge);
+  border: none;
+  box-shadow:
+    inset 0 0 0 1px var(--lg-ring),
+    inset 0 1.5px 2px -1px rgba(0, 20, 50, 0.2);
+}
+
+[data-slot="slider-thumb"],
+[data-slot="switch-thumb"] {
+  box-shadow:
+    inset 0.5px 1px 1px -1px var(--lg-rim),
+    0 2px 6px rgba(0, 20, 50, 0.25);
 }
 
 /* ---------------------------------------------------------------- */
 /* Lensing — refraction on curved edges via SVG displacement.        */
-/* Opt-in (expensive): add .lg-lens to a floating element and mount  */
-/* the #lg-lens SVG filter (see LiquidLens component).               */
+/* Opt-in (expensive): add .lg-lens to floating chrome.              */
 /* ---------------------------------------------------------------- */
 
 .lg-lens {
@@ -128,10 +210,16 @@
   backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation)) url(#lg-lens);
 }
 
-/* Reduced transparency / motion accessibility */
+/* Accessibility */
 @media (prefers-reduced-transparency: reduce) {
-  :root { --lg-opacity: 1; --lg-blur: 0px; }
+  :root {
+    --lg-opacity: 1;
+    --lg-blur: 0px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-slot="button"] { transition: none; transform: none !important; }
+  [data-slot="button"] {
+    transition: none;
+    transform: none !important;
+  }
 }
