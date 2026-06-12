@@ -96,17 +96,22 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.2px;
+  padding: 1.4px;
   pointer-events: none;
+  /* Sharp, clean edge that fades out at the top-right and bottom-left
+     corners — light catches the top-left and bottom-right of a pane,
+     so the border dissolves where glass would not reflect. */
   background: conic-gradient(
-    from 200deg,
-    var(--lg-edge-bright) 0%,
-    var(--lg-edge-dim) 20%,
-    var(--lg-edge-mid) 42%,
-    var(--lg-edge-bright) 55%,
-    var(--lg-edge-dim) 75%,
-    var(--lg-edge-mid) 92%,
-    var(--lg-edge-bright) 100%
+    from 45deg,
+    transparent 0deg,
+    var(--lg-edge-mid) 70deg,
+    var(--lg-edge-bright) 90deg,
+    var(--lg-edge-mid) 110deg,
+    transparent 180deg,
+    var(--lg-edge-mid) 250deg,
+    var(--lg-edge-bright) 270deg,
+    var(--lg-edge-mid) 290deg,
+    transparent 360deg
   );
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
@@ -398,10 +403,22 @@
   margin-right: 10px !important;
 }
 
-/* Inputs: quietly translucent content fields (not chrome) */
+/* Inputs: quiet gray content fields (not chrome) */
 [data-slot="input"],
 [data-slot="textarea"] {
-  background: color-mix(in srgb, var(--background) 45%, transparent);
+  background: color-mix(in srgb, var(--muted) 75%, transparent);
+  border-color: transparent;
+}
+
+/* Inside a frosted overlay panel, search/command surfaces are bare —
+   the panel is the layer, they are its content. */
+[data-slot="popover-content"] [data-slot="command"],
+.lg-regular [data-slot="command"] {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 /* Press interaction: the button rises toward the user — bigger, with
