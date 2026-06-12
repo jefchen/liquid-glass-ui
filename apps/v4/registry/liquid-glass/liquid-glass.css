@@ -754,7 +754,8 @@
 /* Tinted glass buttons: a colored translucent pane with white text,
    set the hue via --tint. Same color set as badges. */
 [data-slot="button"].glass-tint {
-  background: color-mix(in srgb, var(--tint) 65%, transparent) !important;
+  /* vivid accent under glass, like the switch's system green */
+  background: color-mix(in srgb, var(--tint) 78%, transparent) !important;
   color: white !important;
   border: none;
   -webkit-backdrop-filter: blur(10px) saturate(1.5);
