@@ -158,11 +158,22 @@
   --lg-edge-bright: rgba(255, 255, 255, 0.45);
   --lg-edge-mid: rgba(255, 255, 255, 0.22);
   --lg-edge-dim: rgba(255, 255, 255, 0.08);
-  background: color-mix(in srgb, var(--popover) 72%, transparent);
+  /* translucent glass, blurred hard enough to keep menu text legible */
+  background: color-mix(in srgb, var(--popover) 45%, transparent);
+  -webkit-backdrop-filter: blur(40px) saturate(var(--lg-saturation));
+  backdrop-filter: blur(40px) saturate(var(--lg-saturation));
   border-radius: calc(var(--radius) * 1.3);
   box-shadow:
     inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
     0 8px 24px -6px rgba(0, 20, 50, 0.25);
+}
+
+/* Command palette is an overlay surface too */
+[data-slot="command"] {
+  background: color-mix(in srgb, var(--popover) 45%, transparent);
+  -webkit-backdrop-filter: blur(40px) saturate(var(--lg-saturation));
+  backdrop-filter: blur(40px) saturate(var(--lg-saturation));
+  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 [data-slot="tooltip-content"] {
@@ -233,6 +244,49 @@
   border-radius: calc(var(--radius) * 1.2);
 }
 
+/* Controls are themselves Liquid Glass capsules floating above
+   content (Apple's controls layer): clear glass for neutral variants,
+   tinted glass for primary/destructive. */
+[data-slot="button"]:not([class*="ghost"]):not([class*="link"]),
+[data-slot="select-trigger"],
+[data-slot="toggle"],
+[data-slot="toggle-group-item"],
+[data-slot="badge"],
+[data-slot="tabs-list"] {
+  -webkit-backdrop-filter: blur(14px) saturate(var(--lg-saturation));
+  backdrop-filter: blur(14px) saturate(var(--lg-saturation));
+  border-color: transparent;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
+    inset -1px -1.5px 1.5px -2px var(--lg-rim-soft),
+    0 2px 8px -2px rgba(0, 20, 50, 0.15);
+}
+
+/* Neutral variants: clear glass over whatever is behind */
+[data-slot="button"][class*="bg-background"],
+[data-slot="button"][class*="bg-secondary"],
+[data-slot="select-trigger"],
+[data-slot="toggle"],
+[data-slot="toggle-group-item"],
+[data-slot="tabs-list"] {
+  background: color-mix(in srgb, var(--background) 35%, transparent);
+}
+
+/* Prominent variants: tinted glass (Apple's glassProminent) */
+[data-slot="button"][class*="bg-primary"] {
+  background: color-mix(in srgb, var(--primary) 80%, transparent);
+}
+[data-slot="button"][class*="bg-destructive"] {
+  background: color-mix(in srgb, var(--destructive) 80%, transparent);
+}
+
+/* Inputs: quietly translucent content fields (not chrome) */
+[data-slot="input"],
+[data-slot="textarea"] {
+  background: color-mix(in srgb, var(--background) 45%, transparent);
+}
+
 [data-slot="button"]:not([class*="ghost"]):not([class*="link"]) {
   transition:
     box-shadow 0.25s ease,
@@ -242,7 +296,10 @@
 
 [data-slot="button"]:not([class*="ghost"]):not([class*="link"]):hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px -4px rgba(0, 20, 50, 0.25);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    inset 1.5px 2.5px 1.5px -2px var(--lg-rim),
+    0 5px 16px -4px rgba(0, 20, 50, 0.3);
 }
 
 [data-slot="button"]:active {
