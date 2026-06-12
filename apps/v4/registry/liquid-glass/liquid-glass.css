@@ -268,6 +268,22 @@
     0 8px 24px -8px rgba(0, 0, 0, 0.45);
 }
 
+/* Motion-reactive specular: a soft light spot that follows the pointer
+   across the chrome, like highlights responding to device motion. */
+.lg-regular::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    180px 110px at var(--px, 30%) var(--py, -30%),
+    rgba(255, 255, 255, 0.3),
+    transparent 70%
+  );
+  transition: opacity 0.3s ease;
+}
+
 /* Crystalline grain — fine turbulence noise, screen-blended at whisper
    opacity, like micro ice crystals catching light. */
 .lg-regular::before {

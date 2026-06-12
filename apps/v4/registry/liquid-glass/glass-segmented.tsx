@@ -131,13 +131,17 @@ export function GlassSegmented({
             colorInterpolationFilters="sRGB"
           >
             <feImage href={map.href} x="0" y="0" width={map.w} height={map.h} result="map" />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="map"
-              scale={14}
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
+            {/* Chromatic aberration: each color channel refracts at a
+                slightly different strength, fringing at the glass edge
+                like real dispersion. */}
+            <feDisplacementMap in="SourceGraphic" in2="map" scale={12} xChannelSelector="R" yChannelSelector="G" result="dr" />
+            <feColorMatrix in="dr" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cr" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale={14} xChannelSelector="R" yChannelSelector="G" result="dg" />
+            <feColorMatrix in="dg" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="cg" />
+            <feDisplacementMap in="SourceGraphic" in2="map" scale={17} xChannelSelector="R" yChannelSelector="G" result="db" />
+            <feColorMatrix in="db" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="cb" />
+            <feBlend in="cr" in2="cg" mode="screen" result="crg" />
+            <feBlend in="crg" in2="cb" mode="screen" />
           </filter>
         </svg>
       )}
